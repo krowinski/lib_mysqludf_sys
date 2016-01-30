@@ -15,7 +15,7 @@ Mysql Percona:        5.6.28-76.1
 apt-get install gcc libperconaserverclient18-dev percona-server-server-5.6
 ```
 
-##Instalation
+## Installation
 
 ```Shell
 chmod 700 install.sh
