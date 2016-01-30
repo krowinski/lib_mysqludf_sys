@@ -183,4 +183,27 @@ The function is intended for specialized MySQL applications where one needs exte
 
 You have been warned! If you don't see the hazard, please don't try to find it; just trust me on this.
 
+### Benchmarks 
 
+inserting 10000 records to MyISAM table
+
+no trigger
+
+real    0m1.108s
+user    0m0.120s
+sys     0m0.732s
+
+trigger echo with sys_exec('echo 1 >> /tmp/text.txt')
+
+real    0m6.389s
+user    0m0.076s
+sys     0m0.900s
+
+trigger amqp with sys_exec ('amqp-publish -e "amq.direct" -r "mysql" -p -b "test"')
+
+
+real    1m6.383s
+user    0m0.312s
+sys     0m1.588s
+
+Conclusion: System calls are very expensive and slows down insert process.
