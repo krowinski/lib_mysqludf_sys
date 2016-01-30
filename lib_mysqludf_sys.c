@@ -46,6 +46,9 @@ typedef long long longlong;
 #include <stdlib.h>
 
 #include <ctype.h>
+#include <spawn.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #ifdef HAVE_DLOPEN
 #ifdef	__cplusplus
@@ -362,7 +365,20 @@ my_ulonglong sys_exec(
 ,	char *is_null
 ,	char *error
 ){
-	return system(args->args[0]);
+	//return system(args->args[0]);
+    pid_t pid;
+    char *argv[] = {"sh", "-c", args->args[0], NULL};
+    int status;
+    status = posix_spawn(&pid, "/bin/sh", NULL, NULL, argv, environ);
+    if (status == EXIT_SUCCESS) {
+        if (waitpid(pid, &status, 0) != -1) {
+            return status;
+        }
+        return status;
+    } else {
+       return status;
+    }
+    return EXIT_SUCCESS;
 }
 
 my_bool sys_eval_init(
